@@ -2,7 +2,7 @@
 --  Copyright (C) 2016, AdaCore
 --
 
---  This spec has been automatically generated from STM32F40x.svd
+--  This spec has been automatically generated from STM32F105xx.svd
 
 pragma Ada_2012;
 
@@ -22,94 +22,71 @@ package Interfaces.STM32.FLASH is
    ------------------
 
    subtype ACR_LATENCY_Field is Interfaces.Bit_Types.UInt3;
-   subtype ACR_PRFTEN_Field is Interfaces.Bit_Types.Bit;
-   subtype ACR_ICEN_Field is Interfaces.Bit_Types.Bit;
-   subtype ACR_DCEN_Field is Interfaces.Bit_Types.Bit;
-   subtype ACR_ICRST_Field is Interfaces.Bit_Types.Bit;
-   subtype ACR_DCRST_Field is Interfaces.Bit_Types.Bit;
+   subtype ACR_HLFCYA_Field is Interfaces.Bit_Types.Bit;
+   subtype ACR_PRFTBE_Field is Interfaces.Bit_Types.Bit;
+   subtype ACR_PRFTBS_Field is Interfaces.Bit_Types.Bit;
 
    --  Flash access control register
    type ACR_Register is record
       --  Latency
-      LATENCY        : ACR_LATENCY_Field := 16#0#;
+      LATENCY       : ACR_LATENCY_Field := 16#0#;
+      --  Flash half cycle access enable
+      HLFCYA        : ACR_HLFCYA_Field := 16#0#;
+      --  Prefetch buffer enable
+      PRFTBE        : ACR_PRFTBE_Field := 16#1#;
+      --  Read-only. Prefetch buffer status
+      PRFTBS        : ACR_PRFTBS_Field := 16#1#;
       --  unspecified
-      Reserved_3_7   : Interfaces.Bit_Types.UInt5 := 16#0#;
-      --  Prefetch enable
-      PRFTEN         : ACR_PRFTEN_Field := 16#0#;
-      --  Instruction cache enable
-      ICEN           : ACR_ICEN_Field := 16#0#;
-      --  Data cache enable
-      DCEN           : ACR_DCEN_Field := 16#0#;
-      --  Write-only. Instruction cache reset
-      ICRST          : ACR_ICRST_Field := 16#0#;
-      --  Data cache reset
-      DCRST          : ACR_DCRST_Field := 16#0#;
-      --  unspecified
-      Reserved_13_31 : Interfaces.Bit_Types.UInt19 := 16#0#;
+      Reserved_6_31 : Interfaces.Bit_Types.UInt26 := 16#0#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
 
    for ACR_Register use record
-      LATENCY        at 0 range 0 .. 2;
-      Reserved_3_7   at 0 range 3 .. 7;
-      PRFTEN         at 0 range 8 .. 8;
-      ICEN           at 0 range 9 .. 9;
-      DCEN           at 0 range 10 .. 10;
-      ICRST          at 0 range 11 .. 11;
-      DCRST          at 0 range 12 .. 12;
-      Reserved_13_31 at 0 range 13 .. 31;
+      LATENCY       at 0 range 0 .. 2;
+      HLFCYA        at 0 range 3 .. 3;
+      PRFTBE        at 0 range 4 .. 4;
+      PRFTBS        at 0 range 5 .. 5;
+      Reserved_6_31 at 0 range 6 .. 31;
    end record;
 
    -----------------
    -- SR_Register --
    -----------------
 
-   subtype SR_EOP_Field is Interfaces.Bit_Types.Bit;
-   subtype SR_OPERR_Field is Interfaces.Bit_Types.Bit;
-   subtype SR_WRPERR_Field is Interfaces.Bit_Types.Bit;
-   subtype SR_PGAERR_Field is Interfaces.Bit_Types.Bit;
-   subtype SR_PGPERR_Field is Interfaces.Bit_Types.Bit;
-   subtype SR_PGSERR_Field is Interfaces.Bit_Types.Bit;
    subtype SR_BSY_Field is Interfaces.Bit_Types.Bit;
+   subtype SR_PGERR_Field is Interfaces.Bit_Types.Bit;
+   subtype SR_WRPRTERR_Field is Interfaces.Bit_Types.Bit;
+   subtype SR_EOP_Field is Interfaces.Bit_Types.Bit;
 
    --  Status register
    type SR_Register is record
-      --  End of operation
-      EOP            : SR_EOP_Field := 16#0#;
-      --  Operation error
-      OPERR          : SR_OPERR_Field := 16#0#;
-      --  unspecified
-      Reserved_2_3   : Interfaces.Bit_Types.UInt2 := 16#0#;
-      --  Write protection error
-      WRPERR         : SR_WRPERR_Field := 16#0#;
-      --  Programming alignment error
-      PGAERR         : SR_PGAERR_Field := 16#0#;
-      --  Programming parallelism error
-      PGPERR         : SR_PGPERR_Field := 16#0#;
-      --  Programming sequence error
-      PGSERR         : SR_PGSERR_Field := 16#0#;
-      --  unspecified
-      Reserved_8_15  : Interfaces.Bit_Types.Byte := 16#0#;
       --  Read-only. Busy
-      BSY            : SR_BSY_Field := 16#0#;
+      BSY           : SR_BSY_Field := 16#0#;
       --  unspecified
-      Reserved_17_31 : Interfaces.Bit_Types.UInt15 := 16#0#;
+      Reserved_1_1  : Interfaces.Bit_Types.Bit := 16#0#;
+      --  Programming error
+      PGERR         : SR_PGERR_Field := 16#0#;
+      --  unspecified
+      Reserved_3_3  : Interfaces.Bit_Types.Bit := 16#0#;
+      --  Write protection error
+      WRPRTERR      : SR_WRPRTERR_Field := 16#0#;
+      --  End of operation
+      EOP           : SR_EOP_Field := 16#0#;
+      --  unspecified
+      Reserved_6_31 : Interfaces.Bit_Types.UInt26 := 16#0#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
 
    for SR_Register use record
-      EOP            at 0 range 0 .. 0;
-      OPERR          at 0 range 1 .. 1;
-      Reserved_2_3   at 0 range 2 .. 3;
-      WRPERR         at 0 range 4 .. 4;
-      PGAERR         at 0 range 5 .. 5;
-      PGPERR         at 0 range 6 .. 6;
-      PGSERR         at 0 range 7 .. 7;
-      Reserved_8_15  at 0 range 8 .. 15;
-      BSY            at 0 range 16 .. 16;
-      Reserved_17_31 at 0 range 17 .. 31;
+      BSY           at 0 range 0 .. 0;
+      Reserved_1_1  at 0 range 1 .. 1;
+      PGERR         at 0 range 2 .. 2;
+      Reserved_3_3  at 0 range 3 .. 3;
+      WRPRTERR      at 0 range 4 .. 4;
+      EOP           at 0 range 5 .. 5;
+      Reserved_6_31 at 0 range 6 .. 31;
    end record;
 
    -----------------
@@ -117,113 +94,139 @@ package Interfaces.STM32.FLASH is
    -----------------
 
    subtype CR_PG_Field is Interfaces.Bit_Types.Bit;
-   subtype CR_SER_Field is Interfaces.Bit_Types.Bit;
+   subtype CR_PER_Field is Interfaces.Bit_Types.Bit;
    subtype CR_MER_Field is Interfaces.Bit_Types.Bit;
-   subtype CR_SNB_Field is Interfaces.Bit_Types.UInt4;
-   subtype CR_PSIZE_Field is Interfaces.Bit_Types.UInt2;
+   subtype CR_OPTPG_Field is Interfaces.Bit_Types.Bit;
+   subtype CR_OPTER_Field is Interfaces.Bit_Types.Bit;
    subtype CR_STRT_Field is Interfaces.Bit_Types.Bit;
-   subtype CR_EOPIE_Field is Interfaces.Bit_Types.Bit;
-   subtype CR_ERRIE_Field is Interfaces.Bit_Types.Bit;
    subtype CR_LOCK_Field is Interfaces.Bit_Types.Bit;
+   subtype CR_OPTWRE_Field is Interfaces.Bit_Types.Bit;
+   subtype CR_ERRIE_Field is Interfaces.Bit_Types.Bit;
+   subtype CR_EOPIE_Field is Interfaces.Bit_Types.Bit;
 
    --  Control register
    type CR_Register is record
       --  Programming
       PG             : CR_PG_Field := 16#0#;
-      --  Sector Erase
-      SER            : CR_SER_Field := 16#0#;
+      --  Page Erase
+      PER            : CR_PER_Field := 16#0#;
       --  Mass Erase
       MER            : CR_MER_Field := 16#0#;
-      --  Sector number
-      SNB            : CR_SNB_Field := 16#0#;
       --  unspecified
-      Reserved_7_7   : Interfaces.Bit_Types.Bit := 16#0#;
-      --  Program size
-      PSIZE          : CR_PSIZE_Field := 16#0#;
-      --  unspecified
-      Reserved_10_15 : Interfaces.Bit_Types.UInt6 := 16#0#;
+      Reserved_3_3   : Interfaces.Bit_Types.Bit := 16#0#;
+      --  Option byte programming
+      OPTPG          : CR_OPTPG_Field := 16#0#;
+      --  Option byte erase
+      OPTER          : CR_OPTER_Field := 16#0#;
       --  Start
       STRT           : CR_STRT_Field := 16#0#;
+      --  Lock
+      LOCK           : CR_LOCK_Field := 16#1#;
       --  unspecified
-      Reserved_17_23 : Interfaces.Bit_Types.UInt7 := 16#0#;
-      --  End of operation interrupt enable
-      EOPIE          : CR_EOPIE_Field := 16#0#;
+      Reserved_8_8   : Interfaces.Bit_Types.Bit := 16#0#;
+      --  Option bytes write enable
+      OPTWRE         : CR_OPTWRE_Field := 16#0#;
       --  Error interrupt enable
       ERRIE          : CR_ERRIE_Field := 16#0#;
       --  unspecified
-      Reserved_26_30 : Interfaces.Bit_Types.UInt5 := 16#0#;
-      --  Lock
-      LOCK           : CR_LOCK_Field := 16#1#;
+      Reserved_11_11 : Interfaces.Bit_Types.Bit := 16#0#;
+      --  End of operation interrupt enable
+      EOPIE          : CR_EOPIE_Field := 16#0#;
+      --  unspecified
+      Reserved_13_31 : Interfaces.Bit_Types.UInt19 := 16#0#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
 
    for CR_Register use record
       PG             at 0 range 0 .. 0;
-      SER            at 0 range 1 .. 1;
+      PER            at 0 range 1 .. 1;
       MER            at 0 range 2 .. 2;
-      SNB            at 0 range 3 .. 6;
-      Reserved_7_7   at 0 range 7 .. 7;
-      PSIZE          at 0 range 8 .. 9;
-      Reserved_10_15 at 0 range 10 .. 15;
-      STRT           at 0 range 16 .. 16;
-      Reserved_17_23 at 0 range 17 .. 23;
-      EOPIE          at 0 range 24 .. 24;
-      ERRIE          at 0 range 25 .. 25;
-      Reserved_26_30 at 0 range 26 .. 30;
-      LOCK           at 0 range 31 .. 31;
+      Reserved_3_3   at 0 range 3 .. 3;
+      OPTPG          at 0 range 4 .. 4;
+      OPTER          at 0 range 5 .. 5;
+      STRT           at 0 range 6 .. 6;
+      LOCK           at 0 range 7 .. 7;
+      Reserved_8_8   at 0 range 8 .. 8;
+      OPTWRE         at 0 range 9 .. 9;
+      ERRIE          at 0 range 10 .. 10;
+      Reserved_11_11 at 0 range 11 .. 11;
+      EOPIE          at 0 range 12 .. 12;
+      Reserved_13_31 at 0 range 13 .. 31;
    end record;
 
-   --------------------
-   -- OPTCR_Register --
-   --------------------
+   ------------------
+   -- OBR_Register --
+   ------------------
 
-   subtype OPTCR_OPTLOCK_Field is Interfaces.Bit_Types.Bit;
-   subtype OPTCR_OPTSTRT_Field is Interfaces.Bit_Types.Bit;
-   subtype OPTCR_BOR_LEV_Field is Interfaces.Bit_Types.UInt2;
-   subtype OPTCR_WDG_SW_Field is Interfaces.Bit_Types.Bit;
-   subtype OPTCR_nRST_STOP_Field is Interfaces.Bit_Types.Bit;
-   subtype OPTCR_nRST_STDBY_Field is Interfaces.Bit_Types.Bit;
-   subtype OPTCR_RDP_Field is Interfaces.Bit_Types.Byte;
-   subtype OPTCR_nWRP_Field is Interfaces.Bit_Types.UInt12;
+   subtype OBR_OPTERR_Field is Interfaces.Bit_Types.Bit;
+   subtype OBR_RDPRT_Field is Interfaces.Bit_Types.Bit;
+   subtype OBR_WDG_SW_Field is Interfaces.Bit_Types.Bit;
+   subtype OBR_nRST_STOP_Field is Interfaces.Bit_Types.Bit;
+   subtype OBR_nRST_STDBY_Field is Interfaces.Bit_Types.Bit;
 
-   --  Flash option control register
-   type OPTCR_Register is record
-      --  Option lock
-      OPTLOCK        : OPTCR_OPTLOCK_Field := 16#0#;
-      --  Option start
-      OPTSTRT        : OPTCR_OPTSTRT_Field := 16#0#;
-      --  BOR reset Level
-      BOR_LEV        : OPTCR_BOR_LEV_Field := 16#1#;
+   --------------
+   -- OBR.Data --
+   --------------
+
+   --  OBR_Data array element
+   subtype OBR_Data_Element is Interfaces.Bit_Types.Byte;
+
+   --  OBR_Data array
+   type OBR_Data_Field_Array is array (0 .. 1) of OBR_Data_Element
+     with Component_Size => 8, Size => 16;
+
+   --  Type definition for OBR_Data
+   type OBR_Data_Field
+     (As_Array : Boolean := False)
+   is record
+      case As_Array is
+         when False =>
+            --  Data as a value
+            Val : Interfaces.Bit_Types.Short;
+         when True =>
+            --  Data as an array
+            Arr : OBR_Data_Field_Array;
+      end case;
+   end record
+     with Unchecked_Union, Size => 16;
+
+   for OBR_Data_Field use record
+      Val at 0 range 0 .. 15;
+      Arr at 0 range 0 .. 15;
+   end record;
+
+   --  Option byte register
+   type OBR_Register is record
+      --  Read-only. Option byte error
+      OPTERR         : OBR_OPTERR_Field;
+      --  Read-only. Read protection
+      RDPRT          : OBR_RDPRT_Field;
+      --  Read-only. WDG_SW
+      WDG_SW         : OBR_WDG_SW_Field;
+      --  Read-only. nRST_STOP
+      nRST_STOP      : OBR_nRST_STOP_Field;
+      --  Read-only. nRST_STDBY
+      nRST_STDBY     : OBR_nRST_STDBY_Field;
       --  unspecified
-      Reserved_4_4   : Interfaces.Bit_Types.Bit := 16#1#;
-      --  WDG_SW User option bytes
-      WDG_SW         : OPTCR_WDG_SW_Field := 16#0#;
-      --  nRST_STOP User option bytes
-      nRST_STOP      : OPTCR_nRST_STOP_Field := 16#0#;
-      --  nRST_STDBY User option bytes
-      nRST_STDBY     : OPTCR_nRST_STDBY_Field := 16#0#;
-      --  Read protect
-      RDP            : OPTCR_RDP_Field := 16#0#;
-      --  Not write protect
-      nWRP           : OPTCR_nWRP_Field := 16#0#;
+      Reserved_5_9   : Interfaces.Bit_Types.UInt5;
+      --  Read-only. Data0
+      Data           : OBR_Data_Field;
       --  unspecified
-      Reserved_28_31 : Interfaces.Bit_Types.UInt4 := 16#0#;
+      Reserved_26_31 : Interfaces.Bit_Types.UInt6;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
 
-   for OPTCR_Register use record
-      OPTLOCK        at 0 range 0 .. 0;
-      OPTSTRT        at 0 range 1 .. 1;
-      BOR_LEV        at 0 range 2 .. 3;
-      Reserved_4_4   at 0 range 4 .. 4;
-      WDG_SW         at 0 range 5 .. 5;
-      nRST_STOP      at 0 range 6 .. 6;
-      nRST_STDBY     at 0 range 7 .. 7;
-      RDP            at 0 range 8 .. 15;
-      nWRP           at 0 range 16 .. 27;
-      Reserved_28_31 at 0 range 28 .. 31;
+   for OBR_Register use record
+      OPTERR         at 0 range 0 .. 0;
+      RDPRT          at 0 range 1 .. 1;
+      WDG_SW         at 0 range 2 .. 2;
+      nRST_STOP      at 0 range 3 .. 3;
+      nRST_STDBY     at 0 range 4 .. 4;
+      Reserved_5_9   at 0 range 5 .. 9;
+      Data           at 0 range 10 .. 25;
+      Reserved_26_31 at 0 range 26 .. 31;
    end record;
 
    -----------------
@@ -242,8 +245,12 @@ package Interfaces.STM32.FLASH is
       SR      : SR_Register;
       --  Control register
       CR      : CR_Register;
-      --  Flash option control register
-      OPTCR   : OPTCR_Register;
+      --  Flash address register
+      AR      : Interfaces.Bit_Types.Word;
+      --  Option byte register
+      OBR     : OBR_Register;
+      --  Write protection register
+      WRPR    : Interfaces.Bit_Types.Word;
    end record
      with Volatile;
 
@@ -253,7 +260,9 @@ package Interfaces.STM32.FLASH is
       OPTKEYR at 8 range 0 .. 31;
       SR      at 12 range 0 .. 31;
       CR      at 16 range 0 .. 31;
-      OPTCR   at 20 range 0 .. 31;
+      AR      at 20 range 0 .. 31;
+      OBR     at 28 range 0 .. 31;
+      WRPR    at 32 range 0 .. 31;
    end record;
 
    --  FLASH

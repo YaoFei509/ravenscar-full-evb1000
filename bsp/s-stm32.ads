@@ -25,7 +25,7 @@
 --                                                                          --
 ------------------------------------------------------------------------------
 
---  This file provides register definitions for the STM32Fx (ARM Cortex M4/7)
+--  This file provides register definitions for the STM32F10xx (ARM Cortex M3)
 --  microcontrollers from ST Microelectronics.
 
 pragma Restrictions (No_Elaboration_Code);
@@ -48,40 +48,29 @@ package System.STM32 is
 
    function System_Clocks return RCC_System_Clocks;
 
-   --  MODER constants
-   subtype GPIO_MODER_Values is Interfaces.Bit_Types.UInt2;
-   Mode_IN  : constant GPIO_MODER_Values := 0;
-   Mode_OUT : constant GPIO_MODER_Values := 1;
-   Mode_AF  : constant GPIO_MODER_Values := 2;
-   Mode_AN  : constant GPIO_MODER_Values := 3;
+   --  CRL/CRH constants (MODEy subfields)
+   subtype GPIO_MODE_Values is Interfaces.Bit_Types.UInt2;
+   Mode_IN        : constant GPIO_MODE_Values := 0;
+   Mode_OUT_10MHz : constant GPIO_MODE_Values := 1;
+   Mode_OUT_2MHz  : constant GPIO_MODE_Values := 2;
+   Mode_OUT_50MHz : constant GPIO_MODE_Values := 3;
 
-   --  OTYPER constants
-   subtype GPIO_OTYPER_Values is Interfaces.Bit_Types.Bit;
-   Push_Pull  : constant GPIO_OTYPER_Values := 0;
-   Open_Drain : constant GPIO_OTYPER_Values := 1;
+   --  CRL/CRH constants (CNFy subfields)
+   subtype GPIO_CNF_Values is Interfaces.Bit_Types.UInt2;
+   --  When operating in input mode
+   Input_Analog           : constant GPIO_CNF_Values := 0;
+   Input_Floating         : constant GPIO_CNF_Values := 1;
+   Input_PuPd             : constant GPIO_CNF_Values := 2;
+   --  When operating in output mode
+   GPIO_Output_Push_Pull  : constant GPIO_CNF_Values := 0;
+   GPIO_Output_Open_Drain : constant GPIO_CNF_Values := 1;
+   GPIO_AF_Push_Pull      : constant GPIO_CNF_Values := 2;
+   GPIO_AF_Open_Drain     : constant GPIO_CNF_Values := 3;
 
-   --  OSPEEDR constants
-   subtype GPIO_OSPEEDR_Values is Interfaces.Bit_Types.UInt2;
-   Speed_2MHz   : constant GPIO_OSPEEDR_Values := 0; -- Low speed
-   Speed_25MHz  : constant GPIO_OSPEEDR_Values := 1; -- Medium speed
-   Speed_50MHz  : constant GPIO_OSPEEDR_Values := 2; -- Fast speed
-   Speed_100MHz : constant GPIO_OSPEEDR_Values := 3; -- High speed
-
-   --  PUPDR constants
-   subtype GPIO_PUPDR_Values is Interfaces.Bit_Types.UInt2;
-   No_Pull   : constant GPIO_PUPDR_Values := 0;
-   Pull_Up   : constant GPIO_PUPDR_Values := 1;
-   Pull_Down : constant GPIO_PUPDR_Values := 2;
-
-   --  AFL constants
-   AF_USART1  : constant Interfaces.Bit_Types.UInt4 := 7;
-   AF_USART6  : constant Interfaces.Bit_Types.UInt4 := 8;
-
-   type MCU_ID_Register is record
-      DEV_ID   : Interfaces.Bit_Types.UInt12;
-      Reserved : Interfaces.Bit_Types.UInt4;
-      REV_ID   : Interfaces.Bit_Types.Short;
-   end record with Pack, Size => 32;
+   --  ODR constants (when operating in input mode)
+   subtype GPIO_ODR_Values is Interfaces.Bit_Types.Bit;
+   Pull_Down : constant GPIO_ODR_Values := 0;
+   Pull_Up   : constant GPIO_ODR_Values := 1;
 
    --  RCC constants
 
@@ -114,7 +103,7 @@ package System.STM32 is
    AHBPRE_DIV1 : constant AHB_Prescaler := (Enabled => False, Value => DIV2);
 
    type APB_Prescaler_Enum is
-     (DIV2,  DIV4,  DIV8,  DIV16)
+     (DIV2, DIV4, DIV8, DIV16)
      with Size => 2;
 
    type APB_Prescaler is record
@@ -127,72 +116,28 @@ package System.STM32 is
       Value   at 0 range 0 .. 1;
    end record;
 
-   type I2S_Clock_Selection is
-     (I2SSEL_PLL,
-      I2SSEL_CKIN)
+   type ADC_Prescaler is
+     (DIV2, DIV4, DIV6, DIV8)
+     with Size => 2;
+
+   type USB_Prescaler is
+     (DIV3, DIV2)
      with Size => 1;
-
-   type MC01_Clock_Selection is
-     (MC01SEL_HSI,
-      MC01SEL_LSE,
-      MC01SEL_HSE,
-      MC01SEL_PLL)
-     with Size => 2;
-
-   type MC02_Clock_Selection is
-     (MC02SEL_SYSCLK,
-      MC02SEL_PLLI2S,
-      MC02SEL_HSE,
-      MC02SEL_PLL)
-     with Size => 2;
-
-   type MC0x_Prescaler is
-     (MC0xPRE_DIV1,
-      MC0xPRE_DIV2,
-      MC0xPRE_DIV3,
-      MC0xPRE_DIV4,
-      MC0xPRE_DIV5)
-     with Size => 3;
-   for MC0x_Prescaler use
-     (MC0xPRE_DIV1 => 0,
-      MC0xPRE_DIV2 => 2#100#,
-      MC0xPRE_DIV3 => 2#101#,
-      MC0xPRE_DIV4 => 2#110#,
-      MC0xPRE_DIV5 => 2#111#);
 
    --  Constants for RCC CR register
 
-   subtype PLLM_Range is Integer range 2 .. 63;
-   subtype PLLN_Range is Integer range 50 .. 432;
-   subtype PLLP_Range is Integer range 2 .. 8
-     with Static_Predicate => (case PLLP_Range is
-                                 when 2 | 4 | 6 | 8 => True,
-                                 when others => False);
-   subtype PLLQ_Range is Integer range 2 .. 15;
-
-   subtype HSECLK_Range is Integer range   1_000_000 ..  26_000_000;
-   subtype PLLIN_Range  is Integer range     950_000 ..   2_000_000;
-   subtype PLLVC0_Range is Integer range 192_000_000 .. 432_000_000;
-   subtype PLLOUT_Range is Integer range  24_000_000 .. 216_000_000;
-   subtype SYSCLK_Range is Integer range           1 .. 216_000_000;
-   subtype HCLK_Range   is Integer range           1 .. 216_000_000;
-   subtype PCLK1_Range  is Integer range           1 ..  54_000_000;
-   subtype PCLK2_Range  is Integer range           1 .. 108_000_000;
-   subtype SPII2S_Range is Integer range           1 ..  37_500_000;
-   pragma Unreferenced (SPII2S_Range);
+   subtype PREDIV1_Range is Integer range           1 ..          16;
+   subtype PLLMUL_Range  is Integer range           4 ..           9;
+   subtype HSECLK_Range  is Integer range   3_000_000 ..  25_000_000;
+   subtype PLLOUT_Range  is Integer range           1 ..  72_000_000;
+   subtype SYSCLK_Range  is Integer range           1 ..  72_000_000;
+   subtype HCLK_Range    is Integer range           1 ..  72_000_000;
+   subtype PCLK1_Range   is Integer range           1 ..  36_000_000;
+   subtype PCLK2_Range   is Integer range           1 ..  72_000_000;
 
    --  These internal low and high speed clocks are fixed (do not modify)
 
-   HSICLK : constant := 16_000_000;
-   LSICLK : constant :=     32_000;
-
-   MCU_ID : MCU_ID_Register with Volatile,
-                                 Address => System'To_Address (16#E004_2000#);
-   --  Only 32-bits access supported (read-only)
-
-   DEV_ID_STM32F40xxx : constant := 16#413#; --  STM32F40xxx/41xxx
-   DEV_ID_STM32F42xxx : constant := 16#419#; --  STM32F42xxx/43xxx
-   DEV_ID_STM32F46xxx : constant := 16#434#; --  STM32F469xx/479xx
-   DEV_ID_STM32F74xxx : constant := 16#449#; --  STM32F74xxx/75xxx
+   HSICLK : constant := 8_000_000;
+   LSICLK : constant :=    40_000;
 
 end System.STM32;

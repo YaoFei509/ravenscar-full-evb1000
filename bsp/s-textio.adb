@@ -42,43 +42,13 @@ with System.BB.Parameters;
 
 package body System.Text_IO is
 
-   Baudrate : constant := 115_200;
-   --  Bitrate to use
-
    ----------------
    -- Initialize --
    ----------------
 
    procedure Initialize is
-      use System.BB.Parameters;
-
-      APB_Clock    : constant Positive := Positive (STM32.System_Clocks.PCLK2);
-      Int_Divider  : constant Positive := (25 * APB_Clock) / (4 * Baudrate);
-      Frac_Divider : constant Natural := Int_Divider rem 100;
-
    begin
       Initialized := True;
-
-      RCC_Periph.APB2ENR.USART1EN := 1;
-      RCC_Periph.AHB1ENR.GPIOBEN  := 1;
-
-      GPIOB_Periph.MODER.Arr     (6 .. 7) := (Mode_AF,     Mode_AF);
-      GPIOB_Periph.OSPEEDR.Arr   (6 .. 7) := (Speed_50MHz, Speed_50MHz);
-      GPIOB_Periph.OTYPER.OT.Arr (6 .. 7) := (Push_Pull,   Push_Pull);
-      GPIOB_Periph.PUPDR.Arr     (6 .. 7) := (Pull_Up,     Pull_Up);
-      GPIOB_Periph.AFRL.Arr      (6 .. 7) := (AF_USART1,   AF_USART1);
-
-      USART1_Periph.BRR :=
-        (DIV_Fraction => UInt4  (((Frac_Divider * 16 + 50) / 100) mod 16),
-         DIV_Mantissa => UInt12 (Int_Divider / 100),
-         others => <>);
-      USART1_Periph.CR1 :=
-        (UE => 1,
-         RE => 1,
-         TE => 1,
-         others => <>);
-      USART1_Periph.CR2 := (others => <>);
-      USART1_Periph.CR3 := (others => <>);
    end Initialize;
 
    -----------------
@@ -86,20 +56,20 @@ package body System.Text_IO is
    -----------------
 
    function Is_Tx_Ready return Boolean is
-     (USART1_Periph.SR.TC = 1);
+     (True);
 
    -----------------
    -- Is_Rx_Ready --
    -----------------
 
    function Is_Rx_Ready return Boolean is
-     (USART1_Periph.SR.RXNE = 1);
+     (False);
 
    ---------
    -- Get --
    ---------
 
-   function Get return Character is (Character'Val (USART1_Periph.DR.DR));
+   function Get return Character is (Character'First);
 
    ---------
    -- Put --
@@ -107,7 +77,7 @@ package body System.Text_IO is
 
    procedure Put (C : Character) is
    begin
-      USART1_Periph.DR.DR := Character'Pos (C);
+      null;
    end Put;
 
    ----------------------------

@@ -2,7 +2,7 @@
 --  Copyright (C) 2016, AdaCore
 --
 
---  This spec has been automatically generated from STM32F40x.svd
+--  This spec has been automatically generated from STM32F105xx.svd
 
 pragma Ada_2012;
 
@@ -23,7 +23,7 @@ package Interfaces.STM32.USART is
 
    subtype SR_PE_Field is Interfaces.Bit_Types.Bit;
    subtype SR_FE_Field is Interfaces.Bit_Types.Bit;
-   subtype SR_NF_Field is Interfaces.Bit_Types.Bit;
+   subtype SR_NE_Field is Interfaces.Bit_Types.Bit;
    subtype SR_ORE_Field is Interfaces.Bit_Types.Bit;
    subtype SR_IDLE_Field is Interfaces.Bit_Types.Bit;
    subtype SR_RXNE_Field is Interfaces.Bit_Types.Bit;
@@ -38,8 +38,8 @@ package Interfaces.STM32.USART is
       PE             : SR_PE_Field := 16#0#;
       --  Read-only. Framing error
       FE             : SR_FE_Field := 16#0#;
-      --  Read-only. Noise detected flag
-      NF             : SR_NF_Field := 16#0#;
+      --  Read-only. Noise error flag
+      NE             : SR_NE_Field := 16#0#;
       --  Read-only. Overrun error
       ORE            : SR_ORE_Field := 16#0#;
       --  Read-only. IDLE line detected
@@ -47,15 +47,15 @@ package Interfaces.STM32.USART is
       --  Read data register not empty
       RXNE           : SR_RXNE_Field := 16#0#;
       --  Transmission complete
-      TC             : SR_TC_Field := 16#0#;
+      TC             : SR_TC_Field := 16#1#;
       --  Read-only. Transmit data register empty
-      TXE            : SR_TXE_Field := 16#0#;
+      TXE            : SR_TXE_Field := 16#1#;
       --  LIN break detection flag
       LBD            : SR_LBD_Field := 16#0#;
       --  CTS flag
       CTS            : SR_CTS_Field := 16#0#;
       --  unspecified
-      Reserved_10_31 : Interfaces.Bit_Types.UInt22 := 16#3000#;
+      Reserved_10_31 : Interfaces.Bit_Types.UInt22 := 16#0#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
@@ -63,7 +63,7 @@ package Interfaces.STM32.USART is
    for SR_Register use record
       PE             at 0 range 0 .. 0;
       FE             at 0 range 1 .. 1;
-      NF             at 0 range 2 .. 2;
+      NE             at 0 range 2 .. 2;
       ORE            at 0 range 3 .. 3;
       IDLE           at 0 range 4 .. 4;
       RXNE           at 0 range 5 .. 5;
@@ -138,7 +138,6 @@ package Interfaces.STM32.USART is
    subtype CR1_WAKE_Field is Interfaces.Bit_Types.Bit;
    subtype CR1_M_Field is Interfaces.Bit_Types.Bit;
    subtype CR1_UE_Field is Interfaces.Bit_Types.Bit;
-   subtype CR1_OVER8_Field is Interfaces.Bit_Types.Bit;
 
    --  Control register 1
    type CR1_Register is record
@@ -171,11 +170,7 @@ package Interfaces.STM32.USART is
       --  USART enable
       UE             : CR1_UE_Field := 16#0#;
       --  unspecified
-      Reserved_14_14 : Interfaces.Bit_Types.Bit := 16#0#;
-      --  Oversampling mode
-      OVER8          : CR1_OVER8_Field := 16#0#;
-      --  unspecified
-      Reserved_16_31 : Interfaces.Bit_Types.Short := 16#0#;
+      Reserved_14_31 : Interfaces.Bit_Types.UInt18 := 16#0#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
@@ -195,9 +190,7 @@ package Interfaces.STM32.USART is
       WAKE           at 0 range 11 .. 11;
       M              at 0 range 12 .. 12;
       UE             at 0 range 13 .. 13;
-      Reserved_14_14 at 0 range 14 .. 14;
-      OVER8          at 0 range 15 .. 15;
-      Reserved_16_31 at 0 range 16 .. 31;
+      Reserved_14_31 at 0 range 14 .. 31;
    end record;
 
    ------------------
@@ -274,7 +267,6 @@ package Interfaces.STM32.USART is
    subtype CR3_RTSE_Field is Interfaces.Bit_Types.Bit;
    subtype CR3_CTSE_Field is Interfaces.Bit_Types.Bit;
    subtype CR3_CTSIE_Field is Interfaces.Bit_Types.Bit;
-   subtype CR3_ONEBIT_Field is Interfaces.Bit_Types.Bit;
 
    --  Control register 3
    type CR3_Register is record
@@ -300,10 +292,8 @@ package Interfaces.STM32.USART is
       CTSE           : CR3_CTSE_Field := 16#0#;
       --  CTS interrupt enable
       CTSIE          : CR3_CTSIE_Field := 16#0#;
-      --  One sample bit method enable
-      ONEBIT         : CR3_ONEBIT_Field := 16#0#;
       --  unspecified
-      Reserved_12_31 : Interfaces.Bit_Types.UInt20 := 16#0#;
+      Reserved_11_31 : Interfaces.Bit_Types.UInt21 := 16#0#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
@@ -320,8 +310,7 @@ package Interfaces.STM32.USART is
       RTSE           at 0 range 8 .. 8;
       CTSE           at 0 range 9 .. 9;
       CTSIE          at 0 range 10 .. 10;
-      ONEBIT         at 0 range 11 .. 11;
-      Reserved_12_31 at 0 range 12 .. 31;
+      Reserved_11_31 at 0 range 11 .. 31;
    end record;
 
    -------------------
@@ -353,14 +342,14 @@ package Interfaces.STM32.USART is
    -- SR_Register --
    -----------------
 
-   --  Status register
+   --  UART4 SR
    type SR_Register_1 is record
       --  Read-only. Parity error
       PE            : SR_PE_Field := 16#0#;
       --  Read-only. Framing error
       FE            : SR_FE_Field := 16#0#;
-      --  Read-only. Noise detected flag
-      NF            : SR_NF_Field := 16#0#;
+      --  Read-only. Noise error flag
+      NE            : SR_NE_Field := 16#0#;
       --  Read-only. Overrun error
       ORE           : SR_ORE_Field := 16#0#;
       --  Read-only. IDLE line detected
@@ -374,7 +363,7 @@ package Interfaces.STM32.USART is
       --  LIN break detection flag
       LBD           : SR_LBD_Field := 16#0#;
       --  unspecified
-      Reserved_9_31 : Interfaces.Bit_Types.UInt23 := 16#6000#;
+      Reserved_9_31 : Interfaces.Bit_Types.UInt23 := 16#0#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
@@ -382,7 +371,7 @@ package Interfaces.STM32.USART is
    for SR_Register_1 use record
       PE            at 0 range 0 .. 0;
       FE            at 0 range 1 .. 1;
-      NF            at 0 range 2 .. 2;
+      NE            at 0 range 2 .. 2;
       ORE           at 0 range 3 .. 3;
       IDLE          at 0 range 4 .. 4;
       RXNE          at 0 range 5 .. 5;
@@ -393,10 +382,18 @@ package Interfaces.STM32.USART is
    end record;
 
    ------------------
+   -- BRR_Register --
+   ------------------
+
+   ------------------
+   -- CR1_Register --
+   ------------------
+
+   ------------------
    -- CR2_Register --
    ------------------
 
-   --  Control register 2
+   --  UART4 CR2
    type CR2_Register_1 is record
       --  Address of the USART node
       ADD            : CR2_ADD_Field := 16#0#;
@@ -433,43 +430,71 @@ package Interfaces.STM32.USART is
    -- CR3_Register --
    ------------------
 
-   --  Control register 3
+   --  UART4 CR3
    type CR3_Register_1 is record
       --  Error interrupt enable
-      EIE            : CR3_EIE_Field := 16#0#;
+      EIE           : CR3_EIE_Field := 16#0#;
       --  IrDA mode enable
-      IREN           : CR3_IREN_Field := 16#0#;
+      IREN          : CR3_IREN_Field := 16#0#;
       --  IrDA low-power
-      IRLP           : CR3_IRLP_Field := 16#0#;
+      IRLP          : CR3_IRLP_Field := 16#0#;
       --  Half-duplex selection
-      HDSEL          : CR3_HDSEL_Field := 16#0#;
+      HDSEL         : CR3_HDSEL_Field := 16#0#;
       --  unspecified
-      Reserved_4_5   : Interfaces.Bit_Types.UInt2 := 16#0#;
+      Reserved_4_5  : Interfaces.Bit_Types.UInt2 := 16#0#;
       --  DMA enable receiver
-      DMAR           : CR3_DMAR_Field := 16#0#;
+      DMAR          : CR3_DMAR_Field := 16#0#;
       --  DMA enable transmitter
-      DMAT           : CR3_DMAT_Field := 16#0#;
+      DMAT          : CR3_DMAT_Field := 16#0#;
       --  unspecified
-      Reserved_8_10  : Interfaces.Bit_Types.UInt3 := 16#0#;
-      --  One sample bit method enable
-      ONEBIT         : CR3_ONEBIT_Field := 16#0#;
-      --  unspecified
-      Reserved_12_31 : Interfaces.Bit_Types.UInt20 := 16#0#;
+      Reserved_8_31 : Interfaces.Bit_Types.UInt24 := 16#0#;
    end record
      with Volatile_Full_Access, Size => 32,
           Bit_Order => System.Low_Order_First;
 
    for CR3_Register_1 use record
-      EIE            at 0 range 0 .. 0;
-      IREN           at 0 range 1 .. 1;
-      IRLP           at 0 range 2 .. 2;
-      HDSEL          at 0 range 3 .. 3;
-      Reserved_4_5   at 0 range 4 .. 5;
-      DMAR           at 0 range 6 .. 6;
-      DMAT           at 0 range 7 .. 7;
-      Reserved_8_10  at 0 range 8 .. 10;
-      ONEBIT         at 0 range 11 .. 11;
-      Reserved_12_31 at 0 range 12 .. 31;
+      EIE           at 0 range 0 .. 0;
+      IREN          at 0 range 1 .. 1;
+      IRLP          at 0 range 2 .. 2;
+      HDSEL         at 0 range 3 .. 3;
+      Reserved_4_5  at 0 range 4 .. 5;
+      DMAR          at 0 range 6 .. 6;
+      DMAT          at 0 range 7 .. 7;
+      Reserved_8_31 at 0 range 8 .. 31;
+   end record;
+
+   ------------------
+   -- CR3_Register --
+   ------------------
+
+   --  UART5 CR3
+   type CR3_Register_2 is record
+      --  Error interrupt enable
+      EIE           : CR3_EIE_Field := 16#0#;
+      --  IrDA mode enable
+      IREN          : CR3_IREN_Field := 16#0#;
+      --  IrDA low-power
+      IRLP          : CR3_IRLP_Field := 16#0#;
+      --  Half-duplex selection
+      HDSEL         : CR3_HDSEL_Field := 16#0#;
+      --  unspecified
+      Reserved_4_6  : Interfaces.Bit_Types.UInt3 := 16#0#;
+      --  DMA enable transmitter
+      DMAT          : CR3_DMAT_Field := 16#0#;
+      --  unspecified
+      Reserved_8_31 : Interfaces.Bit_Types.UInt24 := 16#0#;
+   end record
+     with Volatile_Full_Access, Size => 32,
+          Bit_Order => System.Low_Order_First;
+
+   for CR3_Register_2 use record
+      EIE           at 0 range 0 .. 0;
+      IREN          at 0 range 1 .. 1;
+      IRLP          at 0 range 2 .. 2;
+      HDSEL         at 0 range 3 .. 3;
+      Reserved_4_6  at 0 range 4 .. 6;
+      DMAT          at 0 range 7 .. 7;
+      Reserved_8_31 at 0 range 8 .. 31;
    end record;
 
    -----------------
@@ -517,23 +542,19 @@ package Interfaces.STM32.USART is
    USART1_Periph : aliased USART2_Peripheral
      with Import, Address => USART1_Base;
 
-   --  Universal synchronous asynchronous receiver transmitter
-   USART6_Periph : aliased USART2_Peripheral
-     with Import, Address => USART6_Base;
-
-   --  Universal synchronous asynchronous receiver transmitter
+   --  Universal asynchronous receiver transmitter
    type UART4_Peripheral is record
-      --  Status register
+      --  UART4 SR
       SR  : SR_Register_1;
-      --  Data register
+      --  UART4 DR
       DR  : DR_Register;
-      --  Baud rate register
+      --  UART4 BRR
       BRR : BRR_Register;
-      --  Control register 1
+      --  UART4 CR1
       CR1 : CR1_Register;
-      --  Control register 2
+      --  UART4 CR2
       CR2 : CR2_Register_1;
-      --  Control register 3
+      --  UART4 CR3
       CR3 : CR3_Register_1;
    end record
      with Volatile;
@@ -547,12 +568,38 @@ package Interfaces.STM32.USART is
       CR3 at 20 range 0 .. 31;
    end record;
 
-   --  Universal synchronous asynchronous receiver transmitter
+   --  Universal asynchronous receiver transmitter
    UART4_Periph : aliased UART4_Peripheral
      with Import, Address => UART4_Base;
 
-   --  Universal synchronous asynchronous receiver transmitter
-   UART5_Periph : aliased UART4_Peripheral
+   --  Universal asynchronous receiver transmitter
+   type UART5_Peripheral is record
+      --  UART5 SR
+      SR  : SR_Register_1;
+      --  UART5 DR
+      DR  : DR_Register;
+      --  UART5 BRR
+      BRR : BRR_Register;
+      --  UART5 CR1
+      CR1 : CR1_Register;
+      --  UART5 CR2
+      CR2 : CR2_Register_1;
+      --  UART5 CR3
+      CR3 : CR3_Register_2;
+   end record
+     with Volatile;
+
+   for UART5_Peripheral use record
+      SR  at 0 range 0 .. 31;
+      DR  at 4 range 0 .. 31;
+      BRR at 8 range 0 .. 31;
+      CR1 at 12 range 0 .. 31;
+      CR2 at 16 range 0 .. 31;
+      CR3 at 20 range 0 .. 31;
+   end record;
+
+   --  Universal asynchronous receiver transmitter
+   UART5_Periph : aliased UART5_Peripheral
      with Import, Address => UART5_Base;
 
 end Interfaces.STM32.USART;

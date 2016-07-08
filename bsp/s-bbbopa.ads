@@ -32,7 +32,7 @@
 --                                                                          --
 ------------------------------------------------------------------------------
 
---  This package defines board parameters for the STM32F407-Discovery board
+--  This package defines board parameters for the DecaWave EVK1000 board
 
 package System.BB.Board_Parameters is
    pragma Pure;
@@ -41,12 +41,10 @@ package System.BB.Board_Parameters is
    -- Hardware clock --
    --------------------
 
-   Clock_Frequency : constant := 168_000_000;
-   --  Optimal frequency of the system clock. Note that the STM32F411 can go
-   --  up to 200 MHz, but all other STM32F40x and STM32F41x MCUs can only do
-   --  168 MHz.
+   Clock_Frequency : constant := 72_000_000;
+   --  Optimal frequency of the system clock.
 
-   HSE_Clock_Frequency : constant := 8_000_000;
+   HSE_Clock_Frequency : constant := 12_000_000;
    --  Frequency of High Speed External clock.
 
 end System.BB.Board_Parameters;

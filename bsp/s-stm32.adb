@@ -70,20 +70,17 @@ package body System.STM32 is
 
          when SYSCLK_SRC_PLL =>
             declare
-               Pllm   : constant Word := Word (RCC_Periph.PLLCFGR.PLLM);
-               Plln   : constant Word := Word (RCC_Periph.PLLCFGR.PLLN);
-               Pllp   : constant Word := Word (RCC_Periph.PLLCFGR.PLLP);
-               Pllvco : Word;
+               PLLMUL : constant Word := Word (RCC_Periph.CFGR.PLLMUL);
+               PREDIV : constant Word :=
+                          Word (RCC_Periph.CFGR2.PREDIV.Arr (1));
 
             begin
-               case PLL_Source'Val (RCC_Periph.PLLCFGR.PLLSRC) is
+               case PLL_Source'Val (RCC_Periph.CFGR.PLLSRC) is
                   when PLL_SRC_HSE =>
-                     Pllvco := (Param.HSE_Clock / Pllm) * Plln;
+                     Result.SYSCLK := (Param.HSE_Clock / PREDIV) * PLLMUL;
                   when PLL_SRC_HSI =>
-                     Pllvco := (Param.HSI_Clock / Pllm) * Plln;
+                     Result.SYSCLK := (Param.HSI_Clock / PREDIV) * PLLMUL;
                end case;
-
-               Result.SYSCLK := Pllvco / ((Pllp + 1) * 2);
             end;
       end case;
 

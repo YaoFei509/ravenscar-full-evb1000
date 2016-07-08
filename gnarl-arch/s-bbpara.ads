@@ -36,7 +36,7 @@
 
 --  This package defines basic parameters used by the low level tasking system
 
---  This is the STM32F40x (ARMv7) version of this package
+--  This is the STM32F105 (ARMv7) version of this package
 
 pragma Restrictions (No_Elaboration_Code);
 
@@ -61,9 +61,11 @@ package System.BB.Parameters is
 
    AHB_PRE  : constant System.STM32.AHB_Prescaler := System.STM32.AHBPRE_DIV1;
    APB1_PRE : constant System.STM32.APB_Prescaler :=
-                (Enabled => True, Value => System.STM32.DIV4);
-   APB2_PRE : constant System.STM32.APB_Prescaler :=
                 (Enabled => True, Value => System.STM32.DIV2);
+   APB2_PRE : constant System.STM32.APB_Prescaler :=
+                (Enabled => False, Value => System.STM32.DIV2);
+   ADC_PRE  : constant System.STM32.ADC_Prescaler := System.STM32.DIV6;
+   USB_PRE  : constant System.STM32.USB_Prescaler := System.STM32.DIV3;
 
    --------------------
    -- External Clock --
@@ -76,9 +78,9 @@ package System.BB.Parameters is
 
    HSE_Clock : constant := Board_Parameters.HSE_Clock_Frequency;
 
-   HSI_Clock : constant := 16_000_000;
+   HSI_Clock : constant := 8_000_000;
 
-   Has_FPU : constant Boolean := True;
+   Has_FPU : constant Boolean := False;
    --  Set to true if core has a FPU
 
    ----------------

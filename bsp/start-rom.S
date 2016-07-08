@@ -27,7 +27,7 @@
 #############################################################################
 
 	.syntax unified
-	.cpu cortex-m4
+	.cpu cortex-m3
 	.thumb
 
 	/* This is the initial vector table and also the one that is used by
@@ -46,27 +46,12 @@ __vectors0:
 	.thumb_func
 	.globl _start_rom
 _start_rom:
-        /* Enable FPU and cache when appropriate */
-        bl _stm32_start_common
-
 	/* Copy .data */
 	movw	r0,#:lower16:__data_start
 	movt	r0,#:upper16:__data_start
 	movw	r1,#:lower16:__data_words
 	movw	r2,#:lower16:__data_load
 	movt	r2,#:upper16:__data_load
-	cbz	r1,1f
-0:	ldr	r4,[r2],#4
-	str	r4,[r0],#4
-	subs	r1,r1,#1
-	bne	0b
-1:
-	/* Copy .ccmdata */
-	movw	r0,#:lower16:__ccmdata_start
-	movt	r0,#:upper16:__ccmdata_start
-	movw	r1,#:lower16:__ccmdata_words
-	movw	r2,#:lower16:__ccmdata_load
-	movt	r2,#:upper16:__ccmdata_load
 	cbz	r1,1f
 0:	ldr	r4,[r2],#4
 	str	r4,[r0],#4
