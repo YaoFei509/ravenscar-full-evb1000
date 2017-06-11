@@ -8,7 +8,7 @@
 --                                                                          --
 --        Copyright (C) 1999-2002 Universidad Politecnica de Madrid         --
 --             Copyright (C) 2003-2004 The European Space Agency            --
---                     Copyright (C) 2003-2011, AdaCore                     --
+--                     Copyright (C) 2003-2016, AdaCore                     --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -37,10 +37,8 @@
 --  This is the root package of the bare board implementation of the low level
 --  tasking support for Ravenscar compliant run times.
 
-pragma Restrictions (No_Elaboration_Code);
---  Ensure no elaboration code to avoid possible elaboration circularities
-
 package System.BB is
+   pragma No_Elaboration_Code_All;
    pragma Pure;
 
    --  All of the package specifications in the System.BB hierarchy are system

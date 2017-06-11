@@ -45,9 +45,8 @@ is
    pragma Preelaborate;
    --  In accordance with Ada 2005 AI-362
 
-   type Suspension_Object is limited private;
-   --  There was a 'Default_Initial_Condition' but it is removed as it resulted
-   --  in an undefined symbol.
+   type Suspension_Object is limited private with
+     Default_Initial_Condition;
 
    procedure Set_True (S : in out Suspension_Object) with
      Global  => null,
@@ -78,7 +77,10 @@ private
    --  underlying operating system.
 
    protected type Suspension_Object is
-      entry Wait;
+      entry Wait
+        with Max_Queue_Length => 1;
+      --  At most one task can be waiting, in accordance to D.10/10
+
       procedure Set_False;
       procedure Set_True;
       function Get_Open return Boolean;

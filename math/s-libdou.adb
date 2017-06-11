@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---           Copyright (C) 2014-2015, Free Software Foundation, Inc.        --
+--           Copyright (C) 2014-2017, Free Software Foundation, Inc.        --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -339,10 +339,7 @@ package body System.Libm_Double is
          X := Multiply_Add (-K_Hi, C4, Multiply_Add (-K_Lo, C3, X));
          X := Multiply_Add (-K_Lo, C4, X);
 
-         if abs K < 2.0**62 then
-            Q := Quadrant ((Int_64 (Q) + Int_64 (N)) mod 4);
-
-         elsif abs K_Lo <= 2.0**62 then
+         if abs K < 2.0**62 or else abs K_Lo <= 2.0**62 then
             Q := Quadrant ((Int_64 (Q) + Int_64 (N)) mod 4);
          end if;
 

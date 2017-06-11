@@ -39,7 +39,7 @@ pragma Restrictions (No_Elaboration_Code);
 package body System.BB.Threads.Queues is
 
    use System.Multiprocessors;
-   use System.BB.CPU_Primitives.Multiprocessors;
+   use System.BB.Board_Support.Multiprocessors;
 
    ----------------
    -- Local data --
@@ -55,7 +55,7 @@ package body System.BB.Threads.Queues is
 
    procedure Change_Priority (Thread : Thread_Id; Priority : Integer)
    is
-      CPU_Id       : constant CPU := Current_CPU;
+      CPU_Id       : constant CPU := BOSUMU.Current_CPU;
       Head         : Thread_Id;
       Prev_Pointer : Thread_Id;
 
@@ -416,7 +416,6 @@ package body System.BB.Threads.Queues is
       use Time;
 
       CPU_Id        : constant CPU := Current_CPU;
-      Next_Alarm    : Time.Time;
       Wakeup_Thread : Thread_Id;
 
    begin
@@ -438,10 +437,7 @@ package body System.BB.Threads.Queues is
          Insert (Wakeup_Thread);
       end loop;
 
-      --  Set the timer for the next alarm on this CPU
-
-      Next_Alarm := Get_Next_Timeout (CPU_Id);
-      Update_Alarm (Next_Alarm);
+      --  Note: the caller (BB.Time.Alarm_Handler) must set the next alarm
    end Wakeup_Expired_Alarms;
 
    -----------
